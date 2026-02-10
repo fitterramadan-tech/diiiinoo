@@ -1,4 +1,5 @@
 const dino = document.getElementById("dino");
+const game = document.querySelector(".game");
 let cactus = document.getElementById("cactus");
 
 let isAlive;
@@ -13,14 +14,12 @@ function jump() {
     }
 }
 
-// Keyboard
 document.addEventListener("keydown", e => {
     if (e.code === "Space") {
         isGameOver ? startGame() : jump();
     }
 });
 
-// Click
 document.addEventListener("click", () => {
     isGameOver ? startGame() : jump();
 });
@@ -28,29 +27,25 @@ document.addEventListener("click", () => {
 function startGame() {
     isGameOver = false;
 
-    // hapus cactus lama
-    cactus.remove();
+    if (cactus) cactus.remove();
 
-    // bikin cactus baru
     cactus = document.createElement("div");
     cactus.id = "cactus";
-    document.body.appendChild(cactus);
+    game.appendChild(cactus); // 🔥 WAJIB ke .game
 
-    // start collision
     clearInterval(isAlive);
     isAlive = setInterval(checkCollision, 10);
 }
 
 function checkCollision() {
-    let dinoTop = parseInt(
-        getComputedStyle(dino).getPropertyValue("bottom")
-    );
+    const dinoRect = dino.getBoundingClientRect();
+    const cactusRect = cactus.getBoundingClientRect();
 
-    let cactusRight = parseInt(
-        getComputedStyle(cactus).getPropertyValue("right")
-    );
-
-    if (cactusRight > 520 && cactusRight < 560 && dinoTop < 40) {
+    if (
+        dinoRect.right > cactusRect.left &&
+        dinoRect.left < cactusRect.right &&
+        dinoRect.bottom > cactusRect.top
+    ) {
         gameOver();
     }
 }
@@ -62,5 +57,4 @@ function gameOver() {
     alert("Game Over!\nTekan spasi / klik untuk main lagi");
 }
 
-// start pertama
 startGame();
