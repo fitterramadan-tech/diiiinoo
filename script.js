@@ -1,5 +1,5 @@
 const dino = document.getElementById("dino");
-const cactus = document.getElementById("cactus");
+let cactus = document.getElementById("cactus");
 
 let isAlive;
 let isGameOver = false;
@@ -7,7 +7,6 @@ let isGameOver = false;
 function jump() {
     if (!dino.classList.contains("jump") && !isGameOver) {
         dino.classList.add("jump");
-
         setTimeout(() => {
             dino.classList.remove("jump");
         }, 500);
@@ -15,42 +14,43 @@ function jump() {
 }
 
 // Keyboard
-document.addEventListener("keydown", function (event) {
-    if (event.code === "Space") {
-        if (isGameOver) startGame();
-        else jump();
+document.addEventListener("keydown", e => {
+    if (e.code === "Space") {
+        isGameOver ? startGame() : jump();
     }
 });
 
-// Click / tap
+// Click
 document.addEventListener("click", () => {
-    if (isGameOver) startGame();
-    else jump();
+    isGameOver ? startGame() : jump();
 });
 
 function startGame() {
     isGameOver = false;
 
-    // reset cactus
-    cactus.style.animation = "none";
-    cactus.style.display = "block";
-    cactus.offsetHeight; // trigger reflow
-    cactus.style.animation = "cactusMove 2s linear infinite";
+    // hapus cactus lama
+    cactus.remove();
 
-    // start collision detection
+    // bikin cactus baru
+    cactus = document.createElement("div");
+    cactus.id = "cactus";
+    document.body.appendChild(cactus);
+
+    // start collision
+    clearInterval(isAlive);
     isAlive = setInterval(checkCollision, 10);
 }
 
 function checkCollision() {
     let dinoTop = parseInt(
-        window.getComputedStyle(dino).getPropertyValue("bottom")
+        getComputedStyle(dino).getPropertyValue("bottom")
     );
 
-    let cactusLeft = parseInt(
-        window.getComputedStyle(cactus).getPropertyValue("right")
+    let cactusRight = parseInt(
+        getComputedStyle(cactus).getPropertyValue("right")
     );
 
-    if (cactusLeft > 520 && cactusLeft < 560 && dinoTop < 40) {
+    if (cactusRight > 520 && cactusRight < 560 && dinoTop < 40) {
         gameOver();
     }
 }
@@ -58,14 +58,9 @@ function checkCollision() {
 function gameOver() {
     isGameOver = true;
     clearInterval(isAlive);
-
-    cactus.style.animation = "none";
-    cactus.style.display = "none";
-
-    setTimeout(() => {
-        alert("Game Over!\nKlik / Spasi untuk main lagi");
-    }, 50);
+    cactus.remove();
+    alert("Game Over!\nTekan spasi / klik untuk main lagi");
 }
 
-// mulai game pertama kali
+// start pertama
 startGame();
