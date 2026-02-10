@@ -40,10 +40,15 @@ body {
     position: absolute;
     bottom: 0;
     right: -20px;
-    animation: cactusMove 1.5s infinite linear;
+    animation: cactusMove 2s infinite linear;
 }
 
+
 @keyframes cactusMove {
-    0% { right: -20px; }
-    100% { right: 600px; }
+    from {
+        right: -20px;
+    }
+    to {
+        right: 600px;
+    }
 }
