@@ -1,6 +1,6 @@
 const dino = document.getElementById("dino");
-const game = document.querySelector(".game");
-let cactus = document.getElementById("cactus");
+const game = document.querySelector(".game"); // 🔥 INI KUNCI
+let cactus;
 
 let isAlive;
 let isGameOver = false;
@@ -8,9 +8,7 @@ let isGameOver = false;
 function jump() {
     if (!dino.classList.contains("jump") && !isGameOver) {
         dino.classList.add("jump");
-        setTimeout(() => {
-            dino.classList.remove("jump");
-        }, 500);
+        setTimeout(() => dino.classList.remove("jump"), 500);
     }
 }
 
@@ -31,7 +29,8 @@ function startGame() {
 
     cactus = document.createElement("div");
     cactus.id = "cactus";
-    game.appendChild(cactus); // 🔥 WAJIB ke .game
+
+    game.appendChild(cactus); // 🔥 WAJIB MASUK .game
 
     clearInterval(isAlive);
     isAlive = setInterval(checkCollision, 10);
@@ -54,7 +53,6 @@ function gameOver() {
     isGameOver = true;
     clearInterval(isAlive);
     cactus.remove();
-    alert("Game Over!\nTekan spasi / klik untuk main lagi");
 }
 
 startGame();
